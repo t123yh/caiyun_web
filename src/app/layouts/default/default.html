@@ -1,64 +1,111 @@
-<div>
-  <nav class="navbar navbar-default">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <router-link
-          class="navbar-brand"
-          :to="{ name: 'home.index' }"
-        >
-          My App
-        </router-link>
-      </div>
-
-      <div class="collapse navbar-collapse" id="navbar">
+<div class="wrapper">
+  <header class="main-header">
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="logo">
+      <i class="fa fa-cloud" aria-hidden="true"></i>
+    </a>
+    <nav class="navbar navbar-static-top" role="navigation">
+      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+      </a>
+      <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
-          <router-link
-            :to="{ name: 'home.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a>
-              Home
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning" v-show="alertCount > 0">{{ alertCount }}</span>
             </a>
-          </router-link>
-        </ul>
-        <ul class="nav navbar-nav">
-          <router-link
-            :to="{ name: 'account.index' }"
-            active-class="active"
-            class="nav-item"
-            tag="li"
-          >
-            <a>
-              Account
-            </a>
-          </router-link>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
+            <ul class="dropdown-menu">
+              <li class="header">气象预警</li>
+              <li>
+                <ul class="menu">
+                  <li v-for="walert in weatherAlerts">
+                    <a href="#" @click="showAlert(walert)">
+                      <i class="fa fa-warning text-aqua"></i> {{ walert.title }}
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <!-- Control Sidebar Toggle Button -->
           <li>
-            <a href="#" @click.prevent="logout">
-              <i class="fa fa-sign-out"></i>
+            <a href="#" data-toggle="control-sidebar">
+              <i class="fa fa-gears"></i>
             </a>
           </li>
         </ul>
       </div>
-    </div>
-  </nav>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <!-- Content will be placed here -->
-        <slot></slot>
-      </div>
-    </div>
+    </nav>
+  </header>
+  
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <ul class="sidebar-menu">
+        <li class="header">天气</li>
+        <li class="active">
+          <a href="#">
+            <i class="fa fa-link"></i>
+            <span>Link</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-link"></i>
+            <span>Another Link</span>
+          </a>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-link"></i>
+            <span>Multilevel</span>
+            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="#">Link in level 2</a>
+            </li>
+            <li>
+              <a href="#">Link in level 2</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+  </aside>
+  
+  <div class="content-wrapper">
+    <section class="content">
+      <slot></slot>
+    </section>
   </div>
+  <footer class="main-footer">
+    <div class="pull-right hidden-xs">
+      中国气象局和<a href="http://caiyunapp.com/">彩云数据</a>驱动
+    </div>
+    &copy; 2016 - <strong>t123yh</strong>
+  </footer>
+  <aside class="control-sidebar control-sidebar-dark">
+    <div class="tab-content">
+      <h3 class="control-sidebar-heading">数据</h3>
+      <ul class="control-sidebar-menu">
+        <li>
+          <a href="javascript::;">
+            <i class="menu-icon fa fa-refresh bg-red"></i>
+            <div class="menu-info">
+              <h4 class="control-sidebar-subheading">刷新数据</h4>
+              <p>数据更新于 10:52</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+  <div class="control-sidebar-bg"></div>
 
+  <modal :title="modalTitle" :show.sync="showModal" @ok="hideAlert()" @cancel="hideAlert()">
+    {{ modalContent }}
+  </modal>
 </div>
+

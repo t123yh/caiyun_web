@@ -8,12 +8,52 @@
  * This way the app stays clean.
  */
 
-import authService from './../../services/auth';
+import {
+  mapGetters
+} from 'vuex';
+
+import modal from 'components/modal.vue';
 
 export default {
+  components: {
+    modal: modal
+  },
   methods: {
-    logout() {
-      authService.logout();
+    showAlert(data) {
+      this.modalTitle = data.title;
+      this.modalContent = data.description;
+      this.showModal = true;
+    },
+    hideAlert () {
+      this.showModal = false;
     },
   },
+  data() {
+    return {
+      showModal: false,
+      modalTitle: '',
+      modalContent: '',
+    };
+  },
+  computed: Object.assign({},
+    mapGetters({
+      weatherData: 'weatherData',
+    }), {
+      alertCount() {
+        // alert('asdf');
+        if (this.weatherData.alert == undefined) {
+          return 0;
+        } else {
+          return this.weatherData.alert.content.length;
+        }
+      },
+      weatherAlerts() {
+        if (this.weatherData.alert == undefined) {
+          return [];
+        } else {
+          return this.weatherData.alert.content;
+        }
+      },
+    }),
+  mounted() {}
 };

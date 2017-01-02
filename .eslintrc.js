@@ -26,7 +26,15 @@ module.exports = {
   'rules': {
     'global-require': 0,
 
+    'no-alert': 0,
+
     'no-param-reassign': 0,
+    'import/prefer-default-export': 0,
+    'no-unused-vars': 0,
+    'no-trailing-spaces': 0,
+    'comma-dangle': 0,
+    'indent': 0,
+    'arrow-parens': 0,
 
     'import/no-unresolved': 0,
     'import/imports-first': 0,

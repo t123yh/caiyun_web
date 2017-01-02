@@ -30,21 +30,11 @@ Vue.config.debug = process.env.NODE_ENV !== 'production';
  * https://github.com/vuejs/vue-resource/tree/master/docs
  */
 import VueResource from 'vue-resource';
-import authService from './app/services/auth';
 
 Vue.use(VueResource);
 
 Vue.http.headers.common.Accept = 'application/json';
 Vue.http.options.root = process.env.API_LOCATION;
-Vue.http.interceptors.push((request, next) => {
-  next((response) => {
-    // When the token is invalid, log the user out
-    if (response.status === 401) {
-      authService.logout();
-    }
-  });
-});
-
 
 /* ============
  * Vuex Router Sync
@@ -77,50 +67,32 @@ Vue.use(VueRouter);
 export const router = new VueRouter({
   routes,
 });
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
-    /*
-     * If the user is not authenticated and visits
-     * a page that requires authentication, redirect to the login page
-     */
-    next({
-      name: 'login.index',
-    });
-  } else if (to.matched.some(m => m.meta.guest) && store.state.auth.authenticated) {
-    /*
-     * If the user is authenticated and visits
-     * an guest page, redirect to the dashboard page
-     */
-    next({
-      name: 'home.index',
-    });
-  } else {
-    next();
-  }
-});
+
+// router.beforeEach((to, from, next) => {
+//   if (to.matched.some(m => m.meta.auth) && !store.state.auth.authenticated) {
+//     /*
+//      * If the user is not authenticated and visits
+//      * a page that requires authentication, redirect to the login page
+//      */
+//     next({
+//       name: 'login.index',
+//     });
+//   } else if (to.matched.some(m => m.meta.guest) && store.state.auth.authenticated) {
+//     /*
+//      * If the user is authenticated and visits
+//      * an guest page, redirect to the dashboard page
+//      */
+//     next({
+//       name: 'home.index',
+//     });
+//   } else {
+//     next();
+//   }
+// });
+
 VuexRouterSync.sync(store, router);
 
 Vue.router = router;
-
-
-/* ============
- * Vue i18n
- * ============
- *
- * Internationalization plugin of Vue.js
- *
- * https://kazupon.github.io/vue-i18n/
- */
-import VueI18n from 'vue-i18n';
-import locale from './app/locale';
-
-Vue.use(VueI18n);
-
-Vue.config.lang = 'en';
-
-Object.keys(locale).forEach((lang) => {
-  Vue.locale(lang, locale[lang]);
-});
 
 
 /* ============
@@ -159,6 +131,10 @@ require('bootstrap/less/bootstrap.less');
 require('font-awesome/less/font-awesome.less');
 
 
+require('admin-lte');
+require('admin-lte/dist/css/AdminLTE.css');
+require('admin-lte/dist/css/skins/skin-purple-light.css');
+
 /* ============
  * Styling
  * ============
@@ -175,6 +151,8 @@ require('font-awesome/less/font-awesome.less');
  * http://stylus-lang.com/
  */
 require('./assets/stylus/app.styl');
+
+require('./app/components/components');
 
 
 export default {

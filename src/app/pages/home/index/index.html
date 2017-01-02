@@ -1,41 +1,62 @@
 <v-layout>
-  <v-panel
-    contextual-style="primary"
-  >
-    <h1 class="panel-title" slot="heading">
-      Welcome!
-    </h1>
+  <box contextual-style="primary" title="获取位置" collapsable="true" v-if="loading">
     <div slot="body">
-      <p>
-        Get started with the Vue 2 boilerplate
-      </p>
-      <p>
-        For questions, contact me:
-      </p>
-      <p>
-        <a class="btn btn-primary" href="http://gitter.im/petervmeijgaard" target="_blank">
-          <i class="fa fa-github fa-fw" aria-hidden="true"></i>
-          <span class="padding-left">Gitter</span>
-        </a>
-        <a class="btn btn-primary" href="http://github.com/petervmeijgaard" target="_blank">
-          <i class="fa fa-github fa-fw" aria-hidden="true"></i>
-          <span class="padding-left">GitHub</span>
-        </a>
-        <a class="btn btn-primary" href="http://twitter.com/petervmeijgaard" target="_blank">
-          <i class="fa fa-twitter fa-fw" aria-hidden="true"></i>
-          <span class="padding-left">Twitter</span>
-        </a>
-      </p>
-      <p>
-        For bugs, see:
-      </p>
-      <a class="btn btn-primary" href="https://github.com/petervmeijgaard/vue-2.0-boilerplate/issues" target="_blank">
-        <i class="fa fa-github fa-fw" aria-hidden="true"></i>
-        <span class="padding-left">GitHub</span>
-      </a>
+      <span>
+      <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> {{ loadStatus }}
+      </span>
     </div>
-    <div slot="footer">
-      Made with love by Vivid Web
+  </box>
+  <span v-if="!loading">
+    <div class="small-box bg-purple">
+      <div class="inner">
+        <h3>{{ weatherDescription }}</h3>
+        <p>{{ precipitationStatus }}</p>
+      </div>
     </div>
-  </v-panel>
+    <div class="row">
+      <info-box title="温度" :description="temperature" icon="fa-thermometer-three-quarters" bgcolor="bg-red"></info-box>
+      <info-box title="湿度" :description="humidity" icon="fa-asterisk" bgcolor="bg-aqua"></info-box>
+      <info-box title="云率" :description="cloudRate" icon="fa-cloud" bgcolor="bg-green"></info-box>
+      <info-box title="AQI" :description="AQI" icon="fa-adjust" bgcolor="bg-yellow"></info-box>
+    </div>
+    <div class="row">
+      <div class="col-md-6 col-sm-12 col-xs-12">
+        <box contextual-style="info" title="预报" collapsable="true">
+          <div slot="body">
+            <div class="table-responsive">
+              <table class="table no-margin">
+                <thead>
+                  <tr>
+                    <th>日期</th>
+                    <th>天气</th>
+                    <th>温度</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="cdata in forecastData">
+                    <td>
+                      {{ cdata.date }}
+                    </td>
+                    <td>
+                      <span class="label" v-bind:class="cdata.weather.color">{{ cdata.weather.name }}</span>
+                    </td>
+                    <td>
+                      {{ cdata.temperature }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </box>
+      </div>
+      <div class="col-md-6 col-sm-12 col-xs-12">
+        <box contextual-style="success" title="气温" collapsable="true">
+          <div slot="body">
+            <temperature-chart :datasets="temperatureData.datasets" :labels="temperatureData.labels" :width=400 :height="graphHeight"></temperature-chart>
+          </div>
+        </box>
+      </div>
+    </div>
+  </span>
 </v-layout>

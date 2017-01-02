@@ -16,6 +16,7 @@ import * as getters from './getters';
 // Modules
 import account from './modules/account';
 import auth from './modules/auth';
+import geodata from './modules/data';
 
 Vue.use(Vuex);
 
@@ -38,6 +39,7 @@ export default new Vuex.Store({
   modules: {
     account,
     auth,
+    geodata,
   },
 
   /**
